@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+
+        margin: 0;
+      }
+
+      body {
+        background: black;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+      }
+
+      canvas {
+        border: 1px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas
+      width="300"
+      height="600"
+      id="game"
+    ></canvas>
+    <script src="./public/index.js"></script>
+    <script>
+      // function createGrid(height, width, cellSize) {
+      //   const canvas = document.getElementById('game')
+      //   canvas.width = width
+      //   canvas.height = height
+      //   document.body.appendChild(canvas)
+
+      //   const ctx = canvas.getContext('2d')
+
+      //   // Vẽ lưới ô vuông
+      //   for (let i = 0; i * cellSize < height; i++) {
+      //     ctx.beginPath()
+      //     ctx.moveTo(0, i * cellSize)
+      //     ctx.lineTo(width, i * cellSize)
+      //     ctx.strokeStyle = 'lightgray' //Màu kẻ lưới
+      //     ctx.stroke()
+
+      //     // Kiểm tra để không vẽ dòng ở ngoài.
+      //     if (i * cellSize < height) {
+      //       // Không vẽ ở ngoài Canvas.
+      //       ctx.beginPath()
+      //       ctx.moveTo(i * cellSize, 0)
+      //       ctx.lineTo(i * cellSize, height)
+      //       ctx.strokeStyle = 'lightgray'
+      //       ctx.stroke()
+      //     }
+      //   }
+      // }
+
+      // createGrid(600, 300, 30)
+    </script>
+  </body>
+</html>
