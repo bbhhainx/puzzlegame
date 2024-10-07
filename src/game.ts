@@ -1,14 +1,28 @@
+import { Board } from './board'
 import { GameConfig } from './gameConfig'
+import { IBoad } from './interface/boad'
+import { ITetromino } from './interface/tetromono'
+import { Tetromino } from './tetromino'
 
 export class Game extends GameConfig {
   #canvas: HTMLCanvasElement
   #context: CanvasRenderingContext2D
+
+  #board: IBoad
+  #tetromino: ITetromino
 
   constructor() {
     super(30, 300, 600)
 
     this.#canvas = document.getElementById('game') as HTMLCanvasElement
     this.#context = this.#canvas.getContext('2d') as CanvasRenderingContext2D
+
+    this.#board = new Board(this.GRID, this.canvas_width, this.canvas_height)
+
+    this.#tetromino = new Tetromino(
+      [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]],
+      { x: 3, y: 0 }
+    )
   }
 
   drawGrid() {
