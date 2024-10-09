@@ -1,4 +1,4 @@
-import { ITetromino } from "./tetromono"
+import { ITetromino } from "./tetromino"
 
 /** bảng chứa các khối được xếp */
 export interface IBoad {

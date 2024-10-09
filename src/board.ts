@@ -1,5 +1,5 @@
-import { IBoad } from "./interface/boad"
-import { ITetromino } from "./interface/tetromono"
+import { IBoad } from "./interface/board"
+import { ITetromino } from "./interface/tetromino"
 
 export class Board implements IBoad {
     grid: number[][]

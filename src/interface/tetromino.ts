@@ -5,6 +5,10 @@ export interface ITetromino {
     /** vị trí của khối */
     position: { x: number, y: number }
 
+
+    /** tạo khối random */
+    createRandomTetromino: () => number[][]
+
     /** phương thức xoay khối */
     rotate: () => void
     /** khối di chuyển sang trái */

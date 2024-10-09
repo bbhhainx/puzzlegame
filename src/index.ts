@@ -1,5 +1,3 @@
-import { Game } from "./game";
+import { Factory } from "./factory"
 
-let game = new Game();
-
-game.drawGrid();
+const game = Factory.createGame();

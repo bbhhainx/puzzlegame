@@ -1,7 +1,7 @@
 import { Board } from './board'
 import { GameConfig } from './gameConfig'
-import { IBoad } from './interface/boad'
-import { ITetromino } from './interface/tetromono'
+import { IBoad } from './interface/board'
+import { ITetromino } from './interface/tetromino'
 import { Tetromino } from './tetromino'
 
 export class Game extends GameConfig {
@@ -20,7 +20,6 @@ export class Game extends GameConfig {
     this.#board = new Board(this.GRID, this.canvas_width, this.canvas_height)
 
     this.#tetromino = new Tetromino(
-      [[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]],
       { x: 3, y: 0 }
     )
   }
