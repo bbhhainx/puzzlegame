@@ -11,17 +11,42 @@ export class Game extends GameConfig {
   #board: IBoad
   #tetromino: ITetromino
 
+  #count: number
+
   constructor() {
     super(30, 300, 600)
+
+    this.#count = 0
 
     this.#canvas = document.getElementById('game') as HTMLCanvasElement
     this.#context = this.#canvas.getContext('2d') as CanvasRenderingContext2D
 
     this.#board = new Board(this.GRID, this.canvas_width, this.canvas_height)
 
-    this.#tetromino = new Tetromino(
-      { x: 3, y: 0 }
-    )
+    this.#tetromino = new Tetromino({ x: 3, y: 0 })
+  }
+
+  #gameLoop(): void {
+    window.requestAnimationFrame(this.#gameLoop.bind(this))
+
+    if (++this.#count < 64) {
+      return // Bỏ qua đến khung hình tiếp theo mà không xử lý thêm
+    }
+
+    this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height)
+
+    // vẽ khối
+    this.draw()
+
+    // vẽ lưới
+    this.drawGrid()
+    this.#count = 0
+
+    // kiểm tra chạm đáy
+    if (this.#board.checkCollision(this.#tetromino) === 'BOTTOM') return
+
+    // khối rơi xuống
+    this.#tetromino.moveDown()
   }
 
   drawGrid() {
@@ -43,5 +68,44 @@ export class Game extends GameConfig {
         this.#context.stroke()
       }
     }
+  }
+
+  drawBlock(x: number, y: number) {
+    this.#context.fillStyle = 'blue'
+    this.#context.fillRect(x * this.GRID, y * this.GRID, this.GRID, this.GRID)
+    this.#context.strokeStyle = 'black'
+    this.#context.strokeRect(x * this.GRID, y * this.GRID, this.GRID, this.GRID)
+  }
+
+  draw() {
+    this.#context.clearRect(0, 0, this.canvas_width, this.canvas_height)
+
+    // Vẽ khối đã xếp
+    this.#board.grid.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value !== 0) {
+          this.drawBlock(x, y)
+        }
+      })
+    })
+
+    // Vẽ khối hiện tại
+    if (this.#tetromino) {
+      this.#tetromino.shape.forEach((row, y) => {
+        row.forEach((value, x) => {
+          if (value !== 0) {
+            this.drawBlock(
+              this.#tetromino.position.x + x,
+              this.#tetromino.position.y + y
+            )
+          }
+        })
+      })
+    }
+  }
+
+  public runGame(): void {
+    window.requestAnimationFrame(this.#gameLoop.bind(this))
+    // document.addEventListener('keydown', this.#handleKeyDown.bind(this))
   }
 }

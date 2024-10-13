@@ -1,2 +1,2 @@
-import * from "./tetromino"
 export * from "./board"
+export * from "./tetromino"

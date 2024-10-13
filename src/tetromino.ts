@@ -38,6 +38,14 @@ export class Tetromino implements ITetromino {
     this.position = position
   }
 
+  get x(): number {
+    return this.position.x
+  }
+
+  get y(): number {
+    return this.position.y
+  }
+
   /** hàm tạo khối ngầu nhiên */
   createRandomTetromino(): number[][] {
     /** lấy 1 vị trí bất kì */
@@ -63,7 +71,19 @@ export class Tetromino implements ITetromino {
       this.shape.map((row) => row[index]).reverse()
     )
   }
-  moveLeft(): void {}
-  moveRight(): void {}
-  moveDown(): void {}
+
+  /** hàm di chuyển khối sang bên trái */
+  moveLeft(): void {
+    this.position.x -= 1
+  }
+
+  /** hàm di chuyển khối sang bên phải */
+  moveRight(): void {
+    this.position.x += 1
+  }
+
+  /** Hàm di chuyển khối xuống dưới */
+  moveDown(): void {
+    this.position.y += 1
+  }
 }
