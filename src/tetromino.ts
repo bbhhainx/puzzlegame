@@ -50,8 +50,13 @@ export class Tetromino implements ITetromino {
   createRandomTetromino(): number[][] {
     /** lấy 1 vị trí bất kì */
     const random_index = Math.floor(Math.random() * 7)
+    
     /** trả về khối tại vị trí tương ứng */
     return this.TETROMINO_SHAPES[random_index]
+  }
+
+  newTetromino(): void {
+    this.shape = this.createRandomTetromino()
   }
 
   /** hàm xoay khối 90 độ theo chiều kim đồng hồ
@@ -70,6 +75,10 @@ export class Tetromino implements ITetromino {
       // cột thứ 2 có 2 giá trị là [2,5] => [5,2] => [[4,1],[5,2]]
       this.shape.map((row) => row[index]).reverse()
     )
+  }
+
+  setPosition(position:{x: number, y: number}): void {
+    this.position = position
   }
 
   /** hàm di chuyển khối sang bên trái */

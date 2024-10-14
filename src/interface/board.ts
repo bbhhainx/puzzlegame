@@ -1,7 +1,7 @@
 import { ITetromino } from './tetromino'
 
 /** các kiểu va chạm */
-export type CollisionType = 'LEFT' | 'RIGHT' | 'BOTTOM' | 'BOARD' | 'NONE'
+export type CollisionType = 'BOTTOM' | 'BOARD' | 'NONE'
 
 /** bảng chứa các khối được xếp */
 export interface IBoad {

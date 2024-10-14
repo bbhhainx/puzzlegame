@@ -29,27 +29,62 @@ export class Game extends GameConfig {
   #gameLoop(): void {
     window.requestAnimationFrame(this.#gameLoop.bind(this))
 
-    if (++this.#count < 64) {
+    if (++this.#count < 24) {
       return // Bỏ qua đến khung hình tiếp theo mà không xử lý thêm
     }
 
     this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height)
 
     // vẽ khối
-    this.draw()
+    this.#draw()
 
     // vẽ lưới
-    this.drawGrid()
+    this.#drawGrid()
     this.#count = 0
 
+    // kiểm tra chạm block
+    if (this.#board.checkCollision(this.#tetromino) === 'BOARD') {
+      this.#resetTetromino()
+      return
+    }
+
     // kiểm tra chạm đáy
-    if (this.#board.checkCollision(this.#tetromino) === 'BOTTOM') return
+    if (this.#board.checkCollision(this.#tetromino) === 'BOTTOM') {
+      this.#resetTetromino()
+      return
+    }
+    
 
     // khối rơi xuống
     this.#tetromino.moveDown()
   }
 
-  drawGrid() {
+  #handleKeyDown(e: KeyboardEvent): void {
+    switch (e.key) {
+      case 'ArrowLeft':
+        this.#tetromino.moveLeft()
+        break
+      case 'ArrowRight':
+        this.#tetromino.moveRight()
+        break
+      case 'ArrowDown':
+        this.#tetromino.moveDown()
+        break
+      case ' ':        
+        this.#tetromino.rotate()
+      default:
+        break
+    }
+  }
+
+  /** reset lại khối khi chạm đáy và chạm với khối khác */
+  #resetTetromino() {
+    this.#board.addTetromino(this.#tetromino)
+    this.#tetromino.setPosition({ x: 3, y: 0 })
+    this.#tetromino.newTetromino()
+  }
+
+  #drawGrid() {
     // Vẽ lưới ô vuông
     for (let i = 0; i * this.GRID < this.canvas_height; i++) {
       this.#context.beginPath()
@@ -70,42 +105,38 @@ export class Game extends GameConfig {
     }
   }
 
-  drawBlock(x: number, y: number) {
+  #drawBlock(x: number, y: number) {
     this.#context.fillStyle = 'blue'
     this.#context.fillRect(x * this.GRID, y * this.GRID, this.GRID, this.GRID)
     this.#context.strokeStyle = 'black'
     this.#context.strokeRect(x * this.GRID, y * this.GRID, this.GRID, this.GRID)
   }
 
-  draw() {
+  #draw() {
     this.#context.clearRect(0, 0, this.canvas_width, this.canvas_height)
 
     // Vẽ khối đã xếp
     this.#board.grid.forEach((row, y) => {
       row.forEach((value, x) => {
-        if (value !== 0) {
-          this.drawBlock(x, y)
-        }
+        if (value === 0) return
+        this.#drawBlock(x, y)
       })
     })
 
     // Vẽ khối hiện tại
-    if (this.#tetromino) {
-      this.#tetromino.shape.forEach((row, y) => {
-        row.forEach((value, x) => {
-          if (value !== 0) {
-            this.drawBlock(
-              this.#tetromino.position.x + x,
-              this.#tetromino.position.y + y
-            )
-          }
-        })
+    this.#tetromino?.shape?.forEach((row, y) => {
+      row.forEach((value, x) => {
+        if (value === 0) return
+        this.#drawBlock(
+          this.#tetromino.position.x + x,
+          this.#tetromino.position.y + y
+        )
       })
-    }
+    })
   }
 
   public runGame(): void {
     window.requestAnimationFrame(this.#gameLoop.bind(this))
-    // document.addEventListener('keydown', this.#handleKeyDown.bind(this))
+    document.addEventListener('keydown', this.#handleKeyDown.bind(this))
   }
 }

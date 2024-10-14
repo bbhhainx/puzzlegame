@@ -5,6 +5,11 @@ export interface ITetromino {
         y: number;
     };
     createRandomTetromino: () => number[][];
+    newTetromino: () => void;
+    setPosition: (position: {
+        x: number;
+        y: number;
+    }) => void;
     rotate: () => void;
     moveLeft: () => void;
     moveRight: () => void;
