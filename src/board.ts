@@ -13,13 +13,14 @@ export class Board implements IBoad {
     this.height = height
   }
 
+  /** thêm khối vào trong bảng */
   addTetromino(tetromino: ITetromino) {
+    /** vị trí của khối */
+    const position = tetromino.position
     for (let y = 0; y < tetromino.shape.length; y++) {
       for (let x = 0; x < tetromino.shape[y].length; x++) {
-        if (tetromino.shape[y][x] !== 0) {
-          this.grid[tetromino.position.y + y][tetromino.position.x + x] =
-            tetromino.shape[y][x]
-        }
+        if (tetromino.shape[y][x] === 0) continue
+        this.grid[position.y + y][position.x + x] = tetromino.shape[y][x]
       }
     }
   }
@@ -27,7 +28,7 @@ export class Board implements IBoad {
   /** hàm kiểm tra va chạm */
   checkCollision(tetromino: ITetromino): CollisionType {
     // lặp qua các phần tử trong khối
-    
+
     for (let y = 0; y < tetromino.shape.length; y++) {
       for (let x = 0; x < tetromino.shape[y].length; x++) {
         // nếu không phải phần tử thuộc khối thì thôi
@@ -37,7 +38,7 @@ export class Board implements IBoad {
 
         // chạm đáy
         if (newY >= this.grid.length) return 'BOTTOM'
-        // chạm khối khác        
+        // chạm khối khác
         if (newY >= 0 && this.grid[newY][newX] !== 0) return 'BOARD'
       }
     }
