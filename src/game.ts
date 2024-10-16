@@ -48,8 +48,8 @@ export class Game extends GameConfig {
     if (this.#board.checkCollision(this.#tetromino) === 'BOARD') {
       this.#resetTetromino()
       if(!this.#board.checkGameOver(this.#tetromino)) return
-      this.#resetTetromino()
       this.#board.clearBoard()
+      this.#resetTetromino()
       return
     }
 
