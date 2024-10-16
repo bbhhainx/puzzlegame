@@ -5,7 +5,9 @@ import { ITetromino } from './interface/tetromino'
 import { Tetromino } from './tetromino'
 
 export class Game extends GameConfig {
+
   #canvas: HTMLCanvasElement
+
   #context: CanvasRenderingContext2D
 
   #board: IBoad
@@ -29,7 +31,7 @@ export class Game extends GameConfig {
   #gameLoop(): void {
     window.requestAnimationFrame(this.#gameLoop.bind(this))
 
-    if (++this.#count < 24) {
+    if (++this.#count < 16) {
       return // Bỏ qua đến khung hình tiếp theo mà không xử lý thêm
     }
 
@@ -45,6 +47,9 @@ export class Game extends GameConfig {
     // kiểm tra chạm block
     if (this.#board.checkCollision(this.#tetromino) === 'BOARD') {
       this.#resetTetromino()
+      if(!this.#board.checkGameOver(this.#tetromino)) return
+      this.#resetTetromino()
+      this.#board.clearBoard()
       return
     }
 
@@ -62,9 +67,13 @@ export class Game extends GameConfig {
   #handleKeyDown(e: KeyboardEvent): void {
     switch (e.key) {
       case 'ArrowLeft':
+        // nếu chạm biên trái thì dừng
+        if(this.#board.checkCollisionLeftRight(this.#tetromino) === 'LEFT') break
         this.#tetromino.moveLeft()
         break
       case 'ArrowRight':
+        // nếu chạm biên phải thì dừng
+        if(this.#board.checkCollisionLeftRight(this.#tetromino) === 'RIGHT') break
         this.#tetromino.moveRight()
         break
       case 'ArrowDown':
@@ -80,6 +89,7 @@ export class Game extends GameConfig {
   /** reset lại khối khi chạm đáy và chạm với khối khác */
   #resetTetromino() {
     this.#board.addTetromino(this.#tetromino)
+    this.#board.clearFullRows()
     this.#tetromino.setPosition({ x: 3, y: 0 })
     this.#tetromino.newTetromino()
   }

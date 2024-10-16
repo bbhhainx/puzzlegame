@@ -25,6 +25,16 @@ export class Board implements IBoad {
     }
   }
 
+  /** kiểm tra chạm biên 2 bên */
+  checkCollisionLeftRight(tetromino: ITetromino): CollisionType {
+    // chạm biên trái
+    if (tetromino.position.x === 0) return 'LEFT'
+    // chạm biên phải
+    if (tetromino.position.x + tetromino.shape[0].length >= this.grid[0].length)
+      return 'RIGHT'
+    return 'NONE'
+  }
+
   /** hàm kiểm tra va chạm */
   checkCollision(tetromino: ITetromino): CollisionType {
     // lặp qua các phần tử trong khối
@@ -46,5 +56,29 @@ export class Board implements IBoad {
     return 'NONE'
   }
 
-  clearFullRows() {}
+  /** hàm xóa các hàng đã được lấp đầy */
+  clearFullRows() {
+    const HEIGHT = this.grid.length
+    const WIDTH = this.grid[0].length
+
+    const NEW_BOARD = this.grid.filter((row) => !row.every((cell) => cell))
+    const EMTY_ROWS = Array.from({ length: HEIGHT - NEW_BOARD.length }, () => Array(WIDTH).fill(0));
+    
+    this.grid = [...EMTY_ROWS, ...NEW_BOARD]
+  }
+
+  /** check gameover */
+  checkGameOver(tetromino: ITetromino): boolean {
+    if(this.grid[0].some((cell) => cell)) return true
+    return false
+  }
+
+  /** xóa bảng tạo game mới */
+  clearBoard() {
+    const HEIGHT = this.grid.length
+    const WIDTH = this.grid[0].length
+    this.grid = Array.from({ length: HEIGHT }, () =>
+      Array(WIDTH).fill(0)
+    )
+  }
 }

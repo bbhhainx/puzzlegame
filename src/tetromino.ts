@@ -77,6 +77,7 @@ export class Tetromino implements ITetromino {
     )
   }
 
+  /** đặt vị trí của khối */
   setPosition(position:{x: number, y: number}): void {
     this.position = position
   }

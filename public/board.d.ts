@@ -6,6 +6,9 @@ export declare class Board implements IBoad {
     height: number;
     constructor(grid: number, width: number, height: number);
     addTetromino(tetromino: ITetromino): void;
+    checkCollisionLeftRight(tetromino: ITetromino): CollisionType;
     checkCollision(tetromino: ITetromino): CollisionType;
     clearFullRows(): void;
+    checkGameOver(tetromino: ITetromino): boolean;
+    clearBoard(): void;
 }
