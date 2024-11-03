@@ -1,8 +1,6 @@
-import { Board } from './board'
+import { Factory } from './factory'
 import { GameConfig } from './gameConfig'
-import { IBoad } from './interface/board'
-import { ITetromino } from './interface/tetromino'
-import { Tetromino } from './tetromino'
+import { IBoad, ICollisionDetector, ITetromino } from './interface'
 
 export class Game extends GameConfig {
 
@@ -12,6 +10,7 @@ export class Game extends GameConfig {
 
   #board: IBoad
   #tetromino: ITetromino
+  #collisionDetector : ICollisionDetector
 
   #count: number
 
@@ -23,12 +22,14 @@ export class Game extends GameConfig {
     this.#canvas = document.getElementById('game') as HTMLCanvasElement
     this.#context = this.#canvas.getContext('2d') as CanvasRenderingContext2D
 
-    this.#board = new Board(this.GRID, this.canvas_width, this.canvas_height)
+    this.#board = Factory.createBoard(this.GRID, this.canvas_width, this.canvas_height)
 
-    this.#tetromino = new Tetromino({ x: 3, y: 0 })
+    this.#tetromino = Factory.createTetromino({ x: 3, y: 0 })
+
+    this.#collisionDetector = Factory.createCollisionDetector()
   }
 
-  #gameLoop(): void {
+  #gameLoop = () => {
     window.requestAnimationFrame(this.#gameLoop.bind(this))
 
     if (++this.#count < 16) {
@@ -44,17 +45,23 @@ export class Game extends GameConfig {
     this.#drawGrid()
     this.#count = 0
 
+    const TYPE_COLLISION = this.#collisionDetector.checkCollision(this.#board,this.#tetromino)
+
     // kiểm tra chạm block
-    if (this.#board.checkCollision(this.#tetromino) === 'BOARD') {
+    if (TYPE_COLLISION === 'BOARD') {
+      // đặt lại vị trí của khối và tạo khối mới
       this.#resetTetromino()
-      if(!this.#board.checkGameOver(this.#tetromino)) return
+
+      // nếu game chưa kết thúc thì thôi
+      if(!this.#isGameOver()) return
+      // nếu kết thúc thì xóa bảng và đặt lại vị trí của khối
       this.#board.clearBoard()
       this.#resetTetromino()
       return
     }
 
     // kiểm tra chạm đáy
-    if (this.#board.checkCollision(this.#tetromino) === 'BOTTOM') {
+    if (TYPE_COLLISION === 'BOTTOM') {
       this.#resetTetromino()
       return
     }
@@ -143,6 +150,10 @@ export class Game extends GameConfig {
         )
       })
     })
+  }
+
+  #isGameOver() {
+    return this.#board.getFirstRow().some((cell) => cell)
   }
 
   public runGame(): void {

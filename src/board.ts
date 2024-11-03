@@ -1,5 +1,4 @@
-import { CollisionType, IBoad } from './interface/board'
-import { ITetromino } from './interface/tetromino'
+import { CollisionType, IBoad, ITetromino } from './interface'
 
 export class Board implements IBoad {
   grid: number[][]
@@ -15,12 +14,16 @@ export class Board implements IBoad {
 
   /** thêm khối vào trong bảng */
   addTetromino(tetromino: ITetromino) {
+    /** hình dạng của khối */
+    const SHAPE = tetromino.shape
+    
     /** vị trí của khối */
-    const position = tetromino.position
-    for (let y = 0; y < tetromino.shape.length; y++) {
-      for (let x = 0; x < tetromino.shape[y].length; x++) {
-        if (tetromino.shape[y][x] === 0) continue
-        this.grid[position.y + y][position.x + x] = tetromino.shape[y][x]
+    const POSITION = tetromino.position
+    
+    for (let y = 0; y < SHAPE.length; y++) {
+      for (let x = 0; x < SHAPE[y].length; x++) {
+        if (SHAPE[y][x] === 0) continue
+        this.grid[POSITION.y + y][POSITION.x + x] = SHAPE[y][x]
       }
     }
   }
@@ -36,25 +39,25 @@ export class Board implements IBoad {
   }
 
   /** hàm kiểm tra va chạm */
-  checkCollision(tetromino: ITetromino): CollisionType {
-    // lặp qua các phần tử trong khối
+  // checkCollision(tetromino: ITetromino): CollisionType {
+  //   // lặp qua các phần tử trong khối
 
-    for (let y = 0; y < tetromino.shape.length; y++) {
-      for (let x = 0; x < tetromino.shape[y].length; x++) {
-        // nếu không phải phần tử thuộc khối thì thôi
-        if (tetromino.shape[y][x] === 0) continue
-        const newX = tetromino.position.x + x
-        const newY = tetromino.position.y + y + 1
+  //   for (let y = 0; y < tetromino.shape.length; y++) {
+  //     for (let x = 0; x < tetromino.shape[y].length; x++) {
+  //       // nếu không phải phần tử thuộc khối thì thôi
+  //       if (tetromino.shape[y][x] === 0) continue
+  //       const newX = tetromino.position.x + x
+  //       const newY = tetromino.position.y + y + 1
 
-        // chạm đáy
-        if (newY >= this.grid.length) return 'BOTTOM'
-        // chạm khối khác
-        if (newY >= 0 && this.grid[newY][newX] !== 0) return 'BOARD'
-      }
-    }
-    // không chạm
-    return 'NONE'
-  }
+  //       // chạm đáy
+  //       if (newY >= this.grid.length) return 'BOTTOM'
+  //       // chạm khối khác
+  //       if (newY >= 0 && this.grid[newY][newX] !== 0) return 'BOARD'
+  //     }
+  //   }
+  //   // không chạm
+  //   return 'NONE'
+  // }
 
   /** hàm xóa các hàng đã được lấp đầy */
   clearFullRows() {
@@ -67,10 +70,9 @@ export class Board implements IBoad {
     this.grid = [...EMTY_ROWS, ...NEW_BOARD]
   }
 
-  /** check gameover */
-  checkGameOver(tetromino: ITetromino): boolean {
-    if(this.grid[0].some((cell) => cell)) return true
-    return false
+  /** lấy ra hàng đầu tiên */
+  getFirstRow(): number[] {
+    return this.grid[0]
   }
 
   /** xóa bảng tạo game mới */

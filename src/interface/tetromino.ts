@@ -5,22 +5,24 @@ export interface ITetromino {
     /** vị trí của khối */
     position: { x: number, y: number }
 
+    /** lấy hình dạng của khối cần xếp */
+    getShape(): number[][]
 
     /** tạo khối random */
-    createRandomTetromino: () => number[][]
+    createRandomTetromino(): number[][]
 
     /** tạo khối mới */
-    newTetromino: () => void
+    newTetromino(): void
 
     /** đặt vị trí cho khối */
-    setPosition: (position: { x: number, y: number }) => void
+    setPosition(position: { x: number, y: number }): void
 
     /** phương thức xoay khối */
-    rotate: () => void
+    rotate(): void
     /** khối di chuyển sang trái */
-    moveLeft: () => void
+    moveLeft(): void
     /** khối di chuyển sang phải */
-    moveRight: () => void
+    moveRight(): void
     /** khối di chuyển xuống */
-    moveDown: () => void
+    moveDown(): void
 }

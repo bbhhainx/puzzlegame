@@ -46,6 +46,11 @@ export class Tetromino implements ITetromino {
     return this.position.y
   }
 
+  /** hàm lấy hình dạng của khối */
+  getShape(): number[][] {
+    return this.shape
+  }
+
   /** hàm tạo khối ngầu nhiên */
   createRandomTetromino(): number[][] {
     /** lấy 1 vị trí bất kì */

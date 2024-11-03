@@ -1,8 +1,8 @@
-import { Board } from "./board";
 import { Game } from "./game";
-import { IBoad } from "./interface/board";
-import { ITetromino } from "./interface/tetromino";
+import { Board } from "./board";
 import { Tetromino } from "./tetromino";
+import { CollisionDetector } from "./collision_detector";
+import { ICollisionDetector, ITetromino, IBoad } from "./interface";
 
 export class Factory{
     static createGame():Game{
@@ -14,5 +14,9 @@ export class Factory{
 
     static createTetromino(position: { x: number, y: number }):ITetromino{
         return new Tetromino(position);
+    }
+
+    static createCollisionDetector(): ICollisionDetector{
+        return new CollisionDetector();
     }
 }
